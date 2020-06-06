@@ -1,11 +1,4 @@
 #!/bin/bash
-# Functie: 		gcloud installation and delete script to install Wordpress.
-#
-# Arguments: 	-delete,-d
-# Author:   	Jael Romero
-# Copyright:	2020 GNU jaelromero@yapo.be
-# Version:		1.0
-# Requires: 	Google SDK,mysql,apache,curl,and  valid gcloud project
 
 DB_INSTANCE=wordpresdb-test-1
 DB_NAME=wordpress
@@ -25,25 +18,16 @@ ERROR_GC="Installeer de google cloud SDK !"
 
 if [[ $1 == "-d" || $1 == "--delete" ]] &>/dev/null
 then
-    # Check of er een instantie draait
-    instance=$( gcloud compute instances list | cut -d ' ' -f1 | grep $INSTANCE_NAME ) &>/dev/null
-    if [[ $instance!= 'wordpress' ]] &>/dev/null
-        then  echo "no existing wordpress instances found.."
-        exit 1 &>/dev/null
-    fi
-
     echo "deleting wordpress"
     sleep 4
     echo "pleas wait.."
-    
-    # De quiet flag is steeds nodig, want anders vraagt gcloud om bevestiging.
-    # En als je dat dan naar dev/null stuurt, zie je dat niet en zit je vast!
+    echo
+    gcloud sql instances delete $DB_INSTANCE --async --quiet >&2 
+    gcloud compute instances delete $INSTANCE_NAME --quiet >&2 
+    exit 0;
+fi
 
-    # Verwijder insantie rocket-chat
-    echo "removing instance.. "
-    gcloud compute instances delete $instance --zone=europe-west1-b --quiet >&2 
-    echo "wordpress sucessfull deleted"
-else
+
 
 which gcloud >/dev/null || { echo "install package gcloud" >&2; exit 1; }
 dpkg -s mysql-client &> /dev/null || { echo "install package mysql-client"; exit 1; }
@@ -98,6 +82,6 @@ gcloud compute instances create $INSTANCE_NAME \
 
 
 # Haal het ip adress op en geeft dit door als  aan 
-ipadress=$(gcloud compute instances list | grep $INSTANCE_NAME | tr -s " " | cut -d " " -f 5
-gcloud compute instances list | grep $INSTANCE_NAME | tr -s " " | cut -d " " -f 5)
-gcloud sql instances patch $DB_INSTANCE --authorized-networks=$ipadress --quiet
+#ipadress=$(gcloud compute instances list | grep $INSTANCE_NAME | tr -s " " | cut -d " " -f 5
+#gcloud compute instances list | grep $INSTANCE_NAME | tr -s " " | cut -d " " -f 5)
+#gcloud sql instances patch $DB_INSTANCE --authorized-networks=$ipadress --quiet
