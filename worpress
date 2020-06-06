@@ -1,10 +1,21 @@
 #!/bin/bash
+# Functie:      gcloud installation and delete script to install Wordpress
+#
+# Arguments:    --delete,-d
+# Author:       Jael Romero
+# Copyright:    2020 GNU jaelromero@yapo.be
+# Version:      1.0
+# Requires:     Google SDK, Apache Benchmark, Curl, A valid gcloud project
 
+
+#Configuratie
+
+#VM
 DB_INSTANCE=wordpresdb-test-1
 DB_NAME=wordpress
 DB_USER=wordpress
 
-
+#SQL
 INSTANCE_NAME=wordpress
 REGION=europe-west1
 ZONE=europe-west1-b
@@ -12,10 +23,11 @@ IMAGE="ubuntu-os-cloud"
 FAMILY="ubuntu-1804-lts"
 TAGS="http-server,https-server"
 
-
+#ERRORS
 ERROR_SQL="Installeer SQL client !"
 ERROR_GC="Installeer de google cloud SDK !"
 
+#DELETE
 if [[ $1 == "-d" || $1 == "--delete" ]] &>/dev/null
 then
     echo "deleting wordpress"
@@ -28,7 +40,6 @@ then
 fi
 
 
-
 which gcloud >/dev/null || { echo "install package gcloud" >&2; exit 1; }
 dpkg -s mysql-client &> /dev/null || { echo "install package mysql-client"; exit 1; }
 
@@ -39,7 +50,7 @@ echo
 read -s -p "Geef een paswoord voor de ADMIN WP gebruiker: " wordpresspass
 echo
 
-#Maakt SQL instance aan in gc
+#Aanmaken van SQL instantie 
 gcloud sql instances create $DB_INSTANCE --region=$REGION --authorized-networks=0.0.0.0/0
 gcloud sql users set-password root --host=% --instance $DB_INSTANCE --password=$rootpass
 
@@ -54,7 +65,7 @@ mysql --host $dbaddress --user=root --password=$rootpass <<!
 !
 
 
-#Maak ubuntu os-cloud aan met als naam wordpress
+#Aanmaken  VM instantie + startup-script
 echo "creating instance.."
 gcloud compute instances create $INSTANCE_NAME \
 --machine-type=$TYPE \
@@ -81,7 +92,7 @@ gcloud compute instances create $INSTANCE_NAME \
     "
 
 
-# Haal het ip adress op en geeft dit door als  aan 
-#ipadress=$(gcloud compute instances list | grep $INSTANCE_NAME | tr -s " " | cut -d " " -f 5
-#gcloud compute instances list | grep $INSTANCE_NAME | tr -s " " | cut -d " " -f 5)
-#gcloud sql instances patch $DB_INSTANCE --authorized-networks=$ipadress --quiet
+# Access SQL enkel aan host geven
+ipadress=$(gcloud compute instances list | grep $INSTANCE_NAME | tr -s " " | cut -d " " -f 5
+gcloud compute instances list | grep $INSTANCE_NAME | tr -s " " | cut -d " " -f 5)
+gcloud sql instances patch $DB_INSTANCE --authorized-networks=$ipadress --quiet
