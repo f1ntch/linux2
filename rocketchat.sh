@@ -22,7 +22,7 @@ then
 	exit 0
 fi
 
-
+# Verijderen 
 if [[ $1 == "-d" || $1 == "--delete" ]] &>/dev/null
 then
 	# Check of er een instantie draait
