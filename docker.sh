@@ -5,7 +5,7 @@
 # Author:   	Jael Romero
 # Copyright:	2020 GNU jaelromero@yapo.be
 # Version:		1.0
-# Requires:     Google SDK, Apache Benchmark, A valid gcloud project
+# Requires:     Google SDK,MSQL, A valid gcloud project
 
 #Configuratie
 REGION=europe-west1
