@@ -1,5 +1,5 @@
 #!/bin/bash
-# Functie: 		gcloud installation and delete script to install rocket-chat server.
+# Functie: 		gcloud installation and delete script to install wordpress docker server.
 #
 # Arguments: 	--help,--delete,-d
 # Author:   	Jael Romero
