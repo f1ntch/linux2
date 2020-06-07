@@ -102,3 +102,5 @@ gcloud compute instances create-with-container $INSTANCE_NAME --container-image=
 ipaddress=$(gcloud compute instances list | grep $INSTANCE_NAME | tr -s " " | cut -d " " -f 5)
 gcloud sql instances patch $DB_INSTANCE --authorized-networks=$ipaddress/32 --quiet
 fi
+
+echo "Installation sucessfull"
