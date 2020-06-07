@@ -45,9 +45,9 @@ dpkg -s mysql-client &> /dev/null || { echo "install package mysql-client"; exit
 
 which ab    
 which curl  
-read -s -p "Geef een paswoord voor de root SQL gebruiker : " rootpass
+read -s -p "Choose a strong password for the user : " rootpass
 echo 
-read -s -p "Geef een paswoord voor de ADMIN WP gebruiker: " wordpresspass
+read -s -p "Choose a strong password for the Worpress admin user: " wordpresspass
 echo
 
 #Aanmaken van SQL instantie 
