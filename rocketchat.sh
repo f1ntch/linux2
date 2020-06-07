@@ -17,8 +17,8 @@ TAGS="chat"
 
 if [[ $1 == "--help" ]]
 then
-	echo "To install the rocket-chat server run the script without arguments"
-	echo "To delete the rocket-chat server use -d or --delete"
+	echo "To install the $INSTANCE_NAME server run the script without arguments"
+	echo "To delete the $INSTANCE_NAME server use -d or --delete"
 	exit 0
 fi
 
@@ -26,14 +26,13 @@ fi
 if [[ $1 == "-d" || $1 == "--delete" ]] &>/dev/null
 then
 	# Check of er een instantie draait
-	INSTANCE=$( gcloud compute instances list | cut -d ' ' -f1 | grep rocket-chat ) &>/dev/null
-	if [[ $INSTANCE != 'rocket-chat' ]] &>/dev/null
-		then  echo "No existing rocket-chat instances found.."
+	INSTANCE=$( gcloud compute instances list | cut -d ' ' -f1 | grep $INSTANCE_NAME ) &>/dev/null
+	if [[ $INSTANCE != $INSTANCE_NAME ]] &>/dev/null
+		then  echo "No existing $INSTANCE_NAME instances found.."
 		exit 1 &>/dev/null
 	fi
 
-	INSTANCE_NAME="rocket-chat"
-	echo "Deleting rocket-chat"
+	echo "Deleting $INSTANCE_NAME"
 	sleep 4
 	echo "Pleas wait.."
 	
@@ -50,8 +49,8 @@ then
 else
 
 # Check of er reeds een instantie draait
-INSTANCE=$( gcloud compute instances list | cut -d ' ' -f1 | grep rocket-chat )
-	if [[ $INSTANCE == 'rocket-chat' ]]
+	INSTANCE=$( gcloud compute instances list | cut -d ' ' -f1 | grep $INSTANCE_NAME ) &>/dev/null
+	if [[ $INSTANCE == $INSTANCE_NAME ]]
 		then  
 		URL=$( gcloud compute instances list | rev |cut -d ' ' -f3 | rev )
 		echo "Rocket-chat already exists.."
@@ -60,7 +59,7 @@ INSTANCE=$( gcloud compute instances list | cut -d ' ' -f1 | grep rocket-chat )
 		exit 2
 	fi
 
-echo "Installing rocket-chat.."
+echo "Installing $INSTANCE_NAME.."
 sleep 4
 echo "Pleas wait.." 
 
